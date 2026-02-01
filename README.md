@@ -7,7 +7,7 @@ A simple, mobile-friendly Fargo Race Calculator that instantly determines handic
 
 ## License
 
-Copyright © 2026, Michael Bartnett. Distributed under the [MIT](https://opensource.org/licenses/MIT) License.<br>
+Copyright © 2026, Michael Bartnett.<br>
 
 ## Questions
 
