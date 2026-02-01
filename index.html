@@ -232,8 +232,10 @@ const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
 const MIN = Math.min(...HEADERS);
 const MAX = Math.max(...HEADERS);
 
-// Bucketing rule: FLOOR to 10s (519 -> 510), then clamp to MIN/MAX for lookup
-const bucket10 = (n) => clamp(Math.floor(n / 10) * 10, MIN, MAX);
+const bucket10 = (n) => {
+  const clamped = clamp(n, MIN, MAX);
+  return Math.floor(clamped / 10) * 10;
+};
 
 // Bucket for lookup + label for display
 const bucketAndLabel = (raw) => {
