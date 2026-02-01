@@ -229,8 +229,8 @@ const GRID = [
       const INDEX = new Map(HEADERS.map((v, i) => [v, i]));
 const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
 
-const MIN = 250;
-const MAX = 600;
+const MIN = Math.min(...HEADERS);
+const MAX = Math.max(...HEADERS);
 
 // Bucketing rule: FLOOR to 10s (519 -> 510), then clamp to MIN/MAX for lookup
 const bucket10 = (n) => clamp(Math.floor(n / 10) * 10, MIN, MAX);
@@ -249,7 +249,7 @@ const bucketAndLabel = (raw) => {
       const $ = (sel) => mount.querySelector(sel);
       const p1 = $("#p1"), p2 = $("#p2"), raceEl = $("#race"), tiersEl = $("#tiers");
 
-      const update = () => {
+     const update = () => {
   const v1 = parseFloat(p1.value);
   const v2 = parseFloat(p2.value);
 
@@ -259,17 +259,23 @@ const bucketAndLabel = (raw) => {
     return;
   }
 
+  // bucket both
   const a = bucketAndLabel(v1);
   const b = bucketAndLabel(v2);
 
-  const r = INDEX.get(a.bucket);
-  const c = INDEX.get(b.bucket);
+  // IMPORTANT: matrix is (higher) vs (lower)
+  const hi = (v1 >= v2) ? a : b;
+  const lo = (v1 >= v2) ? b : a;
+
+  const r = INDEX.get(hi.bucket);
+  const c = INDEX.get(lo.bucket);
 
   const race = (r !== undefined && c !== undefined) ? (GRID[r]?.[c] ?? "0-0") : "0-0";
 
   raceEl.textContent = race;
-  tiersEl.textContent = `${a.label} vs ${b.label}`;
+  tiersEl.textContent = `${a.label} vs ${b.label}`; // keeps display order as typed
 };
+
 
       p1.addEventListener("input", () => { if (p1.value.length >= 3) p2.focus(); update(); });
       p2.addEventListener("input", () => { if (p2.value.length >= 3) p2.blur(); update(); });
