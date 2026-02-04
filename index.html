@@ -275,7 +275,9 @@ const bucketAndLabel = (raw) => {
 
   const race = (r !== undefined && c !== undefined) ? (GRID[r]?.[c] ?? "0-0") : "0-0";
 
-const [hiRace, loRace] = String(race).split("-").map(Number);
+const parts = String(race).split("-").map(Number);
+const hiRace = Number.isFinite(parts[0]) ? parts[0] : 0;
+const loRace = Number.isFinite(parts[1]) ? parts[1] : 0;
 
 // Show race as Player 1 vs Player 2 (not hi vs lo)
 const displayRace =
