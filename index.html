@@ -275,8 +275,17 @@ const bucketAndLabel = (raw) => {
 
   const race = (r !== undefined && c !== undefined) ? (GRID[r]?.[c] ?? "0-0") : "0-0";
 
-  raceEl.textContent = race;
-  tiersEl.textContent = `${a.label} vs ${b.label}`; // keeps display order as typed
+const [hiRace, loRace] = String(race).split("-").map(Number);
+
+// Show race as Player 1 vs Player 2 (not hi vs lo)
+const displayRace =
+  v1 >= v2
+    ? `${hiRace}-${loRace}`   // Player 1 is higher
+    : `${loRace}-${hiRace}`;  // Player 1 is lower, flip it
+
+raceEl.textContent = displayRace;
+tiersEl.textContent = `${a.label} vs ${b.label}`;
+
 };
 
 
